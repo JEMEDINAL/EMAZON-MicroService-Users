@@ -13,18 +13,6 @@ public class Users {
     private int age;
 
     public Users(String name, String password, String lastName, int idNumber, String phoneNumber, LocalDate dateBirth, String email,int age) {
-        if(name.isEmpty() || lastName.isEmpty() || password.isEmpty()){
-            throw new RuntimeException();
-        }
-        if(!email.contains("@") || email.contains(".")){
-            throw new RuntimeException();
-        }
-        if(!phoneNumber.contains("+") || phoneNumber.length() > 14){
-            throw new RuntimeException();
-        }
-        if(age < 17){
-            throw new RuntimeException("racabidkf" + age);
-        }
         this.name = name;
         this.password = password;
         this.lastName = lastName;
