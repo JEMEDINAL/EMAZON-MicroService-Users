@@ -18,7 +18,7 @@ public class UsersUseCaseService implements UsersUseCase {
 
     @Override
     public AuthResponse saveUser(AuthCreateUserRequest authCreateUserRequest) {
-        if(!authCreateUserRequest.email().contains(UserBusinessRules.REQUIRED_CHARACTER_EMAIL_1) || authCreateUserRequest.email().contains(UserBusinessRules.REQUIRED_CHARACTER_EMAIL_2)){
+        if(!authCreateUserRequest.email().contains(UserBusinessRules.REQUIRED_CHARACTER_EMAIL_1) || !authCreateUserRequest.email().contains(UserBusinessRules.REQUIRED_CHARACTER_EMAIL_2)){
             throw new InvalidEmail();
         }
         if(!authCreateUserRequest.phoneNumber().contains(UserBusinessRules.REQUIRED_CHARACTER_NUMBER_PHONE)){
