@@ -18,4 +18,9 @@ public final class UserErrorMessage {
     public static final String USER_LEGAL_AGE = "You must be of legal age to create your account.";
     public static final String USER_ID_NUMBER_POSITIVE= "The ID number must be positive.";
     public static final String USER_AGE_POSITIVE = "The age must be positive.";
+    public static final String LOGIN_PASSWORD_NOT_BLANK = "The password cannot be empty";
+    public static final String LOGIN_ERROR_CREDENTIALS = "Invalid Email or Password";
+    public static final String PASSWORD_ERROR_CREDENTIAL = "Incorrect password";
+    public static final String NOT_FOUND_USER = "User not found in database";
+    public static final String ACCESS_DENIED = "Access denied: You do not have the necessary permissions to perform this action.";
 }
