@@ -1,6 +1,7 @@
 package com.emazon.microservice_usuario.domain.service;
 
 import com.emazon.microservice_usuario.adapter.in.dto.AuthCreateUserRequest;
+import com.emazon.microservice_usuario.adapter.in.dto.AuthLogIn;
 import com.emazon.microservice_usuario.adapter.in.dto.AuthResponse;
 import com.emazon.microservice_usuario.domain.constant.UserBusinessRules;
 import com.emazon.microservice_usuario.domain.exception.InvalidEmail;
@@ -25,5 +26,10 @@ public class UsersUseCaseService implements UsersUseCase {
             throw new InvalidPhoneNumber();
         }
         return usersRepository.saveUser(authCreateUserRequest) ;
+    }
+
+    @Override
+    public AuthResponse loginUser(AuthLogIn authLogIn) {
+        return usersRepository.loginUser(authLogIn);
     }
 }

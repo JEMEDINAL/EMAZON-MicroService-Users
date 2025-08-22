@@ -1,16 +1,23 @@
 package com.emazon.microservice_usuario.adapter.out.security;
 
 import com.emazon.microservice_usuario.adapter.in.dto.AuthCreateUserRequest;
+import com.emazon.microservice_usuario.adapter.in.dto.AuthLogIn;
 import com.emazon.microservice_usuario.adapter.in.dto.AuthResponse;
 import com.emazon.microservice_usuario.adapter.out.persistance.jpa.entities.RoleEntity;
 import com.emazon.microservice_usuario.adapter.out.persistance.jpa.entities.UserEntity;
 import com.emazon.microservice_usuario.adapter.out.persistance.jpa.repositories.RoleRepository;
 import com.emazon.microservice_usuario.adapter.out.persistance.jpa.repositories.UserRepository;
 import com.emazon.microservice_usuario.adapter.out.util.JwtUtils;
+import com.emazon.microservice_usuario.domain.exception.ErrorCredentialsLogIn;
+import com.emazon.microservice_usuario.domain.exception.ErrorPasswordCredential;
+import com.emazon.microservice_usuario.domain.exception.UserNotFound;
 import com.emazon.microservice_usuario.domain.port.out.UsersRepository;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -43,7 +50,7 @@ public class UserDetailServiceImpl implements UserDetailsService,UsersRepository
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserEntity userEntity = userRepository.findUserEntityByEmail(username).orElseThrow(RuntimeException::new);
+        UserEntity userEntity = userRepository.findUserEntityByEmail(username).orElseThrow(UserNotFound::new);
         List<SimpleGrantedAuthority> authorityList = new ArrayList<>();
         userEntity.getRoles().forEach(role -> authorityList.add(new SimpleGrantedAuthority("ROLE_".concat(role.getRoleEnum().name()))));
         userEntity.getRoles().stream().flatMap(role -> role.getPermissionList().stream()).forEach(permission -> authorityList.add(new SimpleGrantedAuthority(permission.getName())));
@@ -84,5 +91,27 @@ public class UserDetailServiceImpl implements UserDetailsService,UsersRepository
         String accessToken = jwtUtils.createToken(authentication);
         AuthResponse authResponse = new AuthResponse(userSaved.getEmail(),"user created Successfully",accessToken,true );
         return authResponse;
+    }
+
+    @Override
+    public AuthResponse loginUser(AuthLogIn authLogIn) {
+        Authentication authentication = this.authentication(authLogIn.email(), authLogIn.password());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String accessToken = jwtUtils.createToken(authentication);
+        AuthResponse authResponse = new AuthResponse(authLogIn.email(),"User loged succesfully",accessToken,true);
+
+
+        return authResponse;
+    }
+
+    public Authentication authentication(String email,String password){
+        UserDetails userDetails = loadUserByUsername(email);
+        if (userDetails == null){
+            throw new ErrorCredentialsLogIn();
+        }
+        if(!passwordEncoder.matches(password, userDetails.getPassword())){
+            throw new ErrorPasswordCredential();
+        }
+        return new UsernamePasswordAuthenticationToken(email,password,userDetails.getAuthorities());
     }
 }

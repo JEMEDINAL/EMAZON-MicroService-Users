@@ -1,6 +1,7 @@
 package com.emazon.microservice_usuario.adapter.in.web;
 
 import com.emazon.microservice_usuario.adapter.in.dto.AuthCreateUserRequest;
+import com.emazon.microservice_usuario.adapter.in.dto.AuthLogIn;
 import com.emazon.microservice_usuario.adapter.in.dto.AuthResponse;
 import com.emazon.microservice_usuario.adapter.in.validator.JsonValidator;
 import com.emazon.microservice_usuario.domain.port.in.UsersUseCase;
@@ -28,5 +29,11 @@ public class AuthenticationController {
     public ResponseEntity<AuthResponse> register(@RequestBody @Valid AuthCreateUserRequest authCreateUserRequest) throws JsonProcessingException {
         jsonValidator.validatorJson(authCreateUserRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(usersUseCase.saveUser(authCreateUserRequest));
+    }
+
+    @PostMapping("/log-in")
+    public ResponseEntity<AuthResponse> logIn(@RequestBody @Valid AuthLogIn authLogIn) throws JsonProcessingException {
+        jsonValidator.jsonValidatorLogIn(authLogIn);
+        return ResponseEntity.status(HttpStatus.OK).body(usersUseCase.loginUser(authLogIn));
     }
 }
