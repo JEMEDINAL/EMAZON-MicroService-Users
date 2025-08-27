@@ -39,6 +39,8 @@ public class SecurityConfig {
                     http.requestMatchers(HttpMethod.POST, "/method/post").hasAuthority("CREATE");
                     http.requestMatchers(HttpMethod.DELETE, "/method/delete").hasAuthority("DELETE");
                     http.requestMatchers(HttpMethod.PUT, "/method/put").hasAuthority("UPDATE");
+                    http.requestMatchers(HttpMethod.GET, "/method/gestis").hasAuthority("ROLE_ADMIN");
+                    http.requestMatchers(HttpMethod.GET, "/method/asissts").hasAuthority("ROLE_CELLAR_ASSISTANT");
 
                     http.anyRequest().denyAll();
                 })

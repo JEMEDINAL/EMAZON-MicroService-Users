@@ -25,4 +25,14 @@ public class TestController {
     public String callDelete(){
         return "Method Called With DELETE";
     }
+
+    @GetMapping("/gestis")
+    public String testRole(){
+        return "sos admin whacho";
+    }
+
+    @GetMapping("/asissts")
+    public String auxBodega(){
+        return "sos aux_BODEGA";
+    }
 }
