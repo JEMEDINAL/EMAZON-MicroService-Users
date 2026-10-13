@@ -3,6 +3,7 @@
 Este repositorio contiene el **Microservicio de Usuarios (User)**, encargado de la gestión crítica de identidad, autenticación, registro de usuarios y la emisión segura de tokens **JWT (JSON Web Token)** con sus respectivos roles y permisos dentro del ecosistema de microservicios.
 
 Está construido siguiendo los principios de **Arquitectura Hexagonal**, desacoplando la lógica de negocio de los adaptadores de infraestructura, y utiliza **Spring Security** para manejar la autenticación sin estado (*stateless*).
+![Arquitectura](microservice_user.jfif)
 
 ## 🚀 Tecnologías y Versiones
 
